@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>Assignment 2: Weather Problems</title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+
+
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<h1>Assignment 2: Weather Problems</h1>
+
+<p>Storms and other severe weather events can cause both public health and economic problems for communities and municipalities. Many severe events can result in fatalities, injuries, and property damage, and preventing such outcomes to the extent possible is a key concern.
+This project involves exploring the U.S. National Oceanic and Atmospheric Administration&#39;s (NOAA) storm database. This database tracks characteristics of major storms and weather events in the United States, including when and where they occur, as well as estimates of any fatalities, injuries, and property damage.</p>
+
+<p>Installing and loading the required packages:</p>
+
+<pre><code>## Installing package into &#39;C:/Users/Elmer/Documents/R/win-library/3.3&#39;
+## (as &#39;lib&#39; is unspecified)
+</code></pre>
+
+<pre><code>## Warning: package &#39;plyr&#39; is in use and will not be installed
+</code></pre>
+
+<pre><code>## Installing package into &#39;C:/Users/Elmer/Documents/R/win-library/3.3&#39;
+## (as &#39;lib&#39; is unspecified)
+</code></pre>
+
+<pre><code>## Warning: package &#39;dplyr&#39; is in use and will not be installed
+</code></pre>
+
+<pre><code>## Installing package into &#39;C:/Users/Elmer/Documents/R/win-library/3.3&#39;
+## (as &#39;lib&#39; is unspecified)
+</code></pre>
+
+<pre><code>## Warning: package &#39;ggplot2&#39; is in use and will not be installed
+</code></pre>
+
+<pre><code>## Installing package into &#39;C:/Users/Elmer/Documents/R/win-library/3.3&#39;
+## (as &#39;lib&#39; is unspecified)
+</code></pre>
+
+<pre><code>## Warning: package &#39;knitr&#39; is in use and will not be installed
+</code></pre>
+
+<p>Getting the data:</p>
+
+<pre><code class="r">#download.file(&quot;https://d396qusza40orc.cloudfront.net/repdata/data/StormData.csv.bz2&quot;, &quot;StormData.csv.bz2&quot;)
+stormData &lt;- read.csv(&quot;StormData.csv.bz2&quot;)
+head(stormData)
+</code></pre>
+
+<pre><code>##   STATE__           BGN_DATE BGN_TIME TIME_ZONE COUNTY COUNTYNAME STATE
+## 1       1  4/18/1950 0:00:00     0130       CST     97     MOBILE    AL
+## 2       1  4/18/1950 0:00:00     0145       CST      3    BALDWIN    AL
+## 3       1  2/20/1951 0:00:00     1600       CST     57    FAYETTE    AL
+## 4       1   6/8/1951 0:00:00     0900       CST     89    MADISON    AL
+## 5       1 11/15/1951 0:00:00     1500       CST     43    CULLMAN    AL
+## 6       1 11/15/1951 0:00:00     2000       CST     77 LAUDERDALE    AL
+##    EVTYPE BGN_RANGE BGN_AZI BGN_LOCATI END_DATE END_TIME COUNTY_END
+## 1 TORNADO         0                                               0
+## 2 TORNADO         0                                               0
+## 3 TORNADO         0                                               0
+## 4 TORNADO         0                                               0
+## 5 TORNADO         0                                               0
+## 6 TORNADO         0                                               0
+##   COUNTYENDN END_RANGE END_AZI END_LOCATI LENGTH WIDTH F MAG FATALITIES
+## 1         NA         0                      14.0   100 3   0          0
+## 2         NA         0                       2.0   150 2   0          0
+## 3         NA         0                       0.1   123 2   0          0
+## 4         NA         0                       0.0   100 2   0          0
+## 5         NA         0                       0.0   150 2   0          0
+## 6         NA         0                       1.5   177 2   0          0
+##   INJURIES PROPDMG PROPDMGEXP CROPDMG CROPDMGEXP WFO STATEOFFIC ZONENAMES
+## 1       15    25.0          K       0                                    
+## 2        0     2.5          K       0                                    
+## 3        2    25.0          K       0                                    
+## 4        2     2.5          K       0                                    
+## 5        2     2.5          K       0                                    
+## 6        6     2.5          K       0                                    
+##   LATITUDE LONGITUDE LATITUDE_E LONGITUDE_ REMARKS REFNUM
+## 1     3040      8812       3051       8806              1
+## 2     3042      8755          0          0              2
+## 3     3340      8742          0          0              3
+## 4     3458      8626          0          0              4
+## 5     3412      8642          0          0              5
+## 6     3450      8748          0          0              6
+</code></pre>
+
+<h1>Data Processing</h1>
+
+<h2>Across the United States, which types of events (as indicated in the EVTYPE variable) are most harmful with respect to population health?</h2>
+
+<p>First, in order to calculate the most harmful events, the raw data from the stormData dataset is summarized by its two main observations: fatalities and injuries.</p>
+
+<pre><code class="r">casualties &lt;- ddply(stormData, .(EVTYPE), summarize, fatalities = sum(FATALITIES), injuries = sum(INJURIES))
+</code></pre>
+
+<p>Then, both observations were added and the subset was ordered desdending.</p>
+
+<pre><code class="r">casualties$totalCasualties &lt;- casualties$fatalities + casualties$injuries
+casualties &lt;- casualties[with(casualties, order( - totalCasualties)),][1:5,]
+ggplot(casualties, aes(x = EVTYPE, y = totalCasualties)) + geom_bar(stat = &quot;identity&quot;, fill = &quot;light blue&quot;) + xlab(&quot;Event type&quot;) + ylab(&quot;Total casualties&quot;)
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-4-1.png" alt="plot of chunk unnamed-chunk-4"></p>
+
+<p>##Across the United States, which types of events have the greatest economic consequences?
+First, in order to calculate the events with greatest economic consequences, the raw data from the stormData dataset is summarized by its two main observations: property and crop damages.</p>
+
+<pre><code class="r">damages &lt;- ddply(stormData, .(EVTYPE), summarize, property = sum(PROPDMG), crop = sum(CROPDMG))
+</code></pre>
+
+<p>Then, both observations were added and the subset was ordered desdending.</p>
+
+<pre><code class="r">damages$totalDamages &lt;- damages$property + damages$crop
+damages &lt;- damages[with(damages, order( - totalDamages)),][1:5,]
+ggplot(damages, aes(x = EVTYPE, y = totalDamages)) + geom_bar(stat = &quot;identity&quot;, fill = &quot;light blue&quot;) + xlab(&quot;Event type&quot;) + ylab(&quot;Total damages ($)&quot;)
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-6-1.png" alt="plot of chunk unnamed-chunk-6"></p>
+
+<h1>Results</h1>
+
+<ul>
+<li>Across the United States, TORNADOES are the most harmful events.</li>
+<li>Across the United States, FLOODS are the events with the greatest economic consequences.</li>
+</ul>
+
+</body>
+
+</html>
